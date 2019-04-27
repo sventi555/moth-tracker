@@ -20,3 +20,8 @@ Dockerfile
 
 # tooling
 .eslintrc
+
+# tests
+**/*.test.js
+coverage/
+jest.config.js
