@@ -1,0 +1,16 @@
+# node files
+node_modules/
+
+# git files
+.git/
+.gitignore
+
+# informative files
+README.*
+
+# docker files
+Dockerfile
+.dockerignore
+
+# tooling
+.eslintrc
