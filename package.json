@@ -24,7 +24,8 @@
   "homepage": "https://github.com/sventi555/moth-tracker#readme",
   "dependencies": {
     "dotenv": "^7.0.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "pg": "^7.10.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
