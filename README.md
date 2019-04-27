@@ -7,13 +7,13 @@ Node.JS 10.15.x, PostgreSQL 11
 
 ### Postgres setup
 
-To setup postgres in docker, run the following command:
+To set up postgres in docker, run the following command:
 
 ```
 docker run \
     --name moth-tracker-pg \
     -p 5432:5432 \
-    -e POSTGRES_DB=moth-racker \
+    -e POSTGRES_DB=moth-tracker \
     -d postgres
 ```
 
@@ -28,7 +28,7 @@ docker cp ./src/db/db_init.sql moth-tracker-pg:/docker-entrypoint-initdb.d/init.
 Finally, run the init script:
 
 ```
-docker exec moth-tracker-pg psql -U postgres -d moth-tracker -f /docker-entrypoint-initdb.d/initls.sql
+docker exec moth-tracker-pg psql -U postgres -d moth-tracker -f /docker-entrypoint-initdb.d/init.sql
 ```
 
 The .env.example comes with a connection string that will work with this configuration :)
@@ -47,10 +47,11 @@ Run `yarn` or `npm install`, depending on your package manager of choice, to ins
 
 To start the service, simply run the following:
 
+(for yarn)
 ```
 yarn start
 ```
-or
+(or for npm)
 ```
 npm run start
 ```
