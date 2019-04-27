@@ -12,7 +12,6 @@ module.exports = {
     clearMocks: true,
     displayName: 'moth-tracker',
     rootDir: __dirname,
-    setupFiles: ['./jest.setup.js'],
     testEnvironment: 'node',
     testRegex: './server/.*\\.(test)\\.js$'
 };
