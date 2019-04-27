@@ -13,5 +13,5 @@ module.exports = {
     displayName: 'moth-tracker',
     rootDir: __dirname,
     testEnvironment: 'node',
-    testRegex: './server/.*\\.(test)\\.js$'
+    testRegex: './src/.*\\.(test)\\.js$'
 };
