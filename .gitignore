@@ -1,0 +1,12 @@
+# node files
+node_modules/
+
+# OS files
+.DS_Store
+
+# IDE files
+.vscode/
+
+# project files
+.env
+coverage/
