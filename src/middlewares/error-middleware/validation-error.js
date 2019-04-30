@@ -1,7 +1,7 @@
 class ValidationError extends Error {
     constructor(message) {
         super(message);
-        this.code = 400;
+        this.code = 422;
     }
 }
 module.exports = ValidationError;

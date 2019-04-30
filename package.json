@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/sventi555/moth-tracker#readme",
   "dependencies": {
+    "@hapi/joi": "^15.0.0",
     "dotenv-safe": "^6.1.0",
     "express": "^4.16.4",
     "pg": "^7.10.0"
