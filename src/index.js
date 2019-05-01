@@ -1,10 +1,14 @@
 require('dotenv-safe').config();
 const express = require('express');
 
+const { errorMiddleware } = require('./middlewares/error-middleware');
+const mothRoutes = require('./routes/moth-routes');
+
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
+app.use(express.json());
+mothRoutes(app);
+
+app.use(errorMiddleware);
 
 app.listen(process.env.PORT);
