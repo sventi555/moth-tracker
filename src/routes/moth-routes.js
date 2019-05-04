@@ -3,6 +3,12 @@ const Joi = require('@hapi/joi');
 const validate = require('../middlewares/validation-middleware');
 const db = require('../db');
 const {ClientError} = require('../middlewares/error-middleware');
+const {
+    sizeComponent,
+    orderComponent,
+    filterComponent,
+    fieldsComponent
+} = require('../util/query-constructor');
 
 const SCHEMA = Joi.object().keys({
     id: Joi.any().forbidden(),
@@ -17,11 +23,42 @@ const SCHEMA = Joi.object().keys({
 
 function mothRoutes(app) {
     app.get('/moths/:id?',
-        validate({params: Joi.object().keys({
-            id: Joi.string().uuid()
-        })}),
-        (req, res, next) => {
+        validate(
+            {
+                params: Joi.object().keys({
+                    id: Joi.string().uuid()
+                }),
+                query: Joi.object().keys({
+                    fields: Joi.alternatives().try([Joi.string(), Joi.array()]),
+                    sort: Joi.alternatives().try([Joi.string(), Joi.array()]),
+                    limit: Joi.number().integer(),
+                    offset: Joi.number().integer()
+                }).unknown()
+            }
+        ),
+        async (req, res, next) => {
+            const id = req.params.id;
+            const {fields, sort, limit, offset, ...filters} = req.query;
 
+            if (id) {
+                filters.id = id;
+            }
+
+            try {
+                const filterComp = filterComponent(filters);
+
+                let queryString = 'SELECT';
+                queryString += fieldsComponent(fields);
+                queryString += ' FROM moths';
+                queryString += filterComp.str;
+                queryString += orderComponent(sort);
+                queryString += sizeComponent(limit, offset);
+
+                const moths = await db.query(queryString, filterComp.args);
+                res.status(200).json(filters.id ? moths.rows[0] : moths.rows);
+            } catch (error) {
+                next(error);
+            }
         });
 
     app.post('/moths', validate(SCHEMA),
