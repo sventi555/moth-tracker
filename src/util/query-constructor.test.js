@@ -2,7 +2,8 @@ const {
     sizeComponent,
     orderComponent,
     filterComponent,
-    fieldsComponent
+    fieldsComponent,
+    updateComponent
 } = require('./query-constructor');
 
 describe('given sizeComponent is being called', () => {
@@ -142,6 +143,30 @@ describe('given fieldsComponent is being called', () => {
         test('then component is formed properly', () => {
             expect(fieldsComponent(['weight', 'wingspan', 'species']))
                 .toEqual(' weight, wingspan, species');
+        });
+    });
+});
+
+describe('given updateComponent is being called', () => {
+    describe('when updates is an empty object', () => {
+        test('then str and args are empty', () => {
+            const updateComp = updateComponent({});
+            expect(updateComp.str).toEqual('');
+            expect(updateComp.args).toEqual([]);
+        });
+    });
+    describe('when one update is given', () => {
+        test('then str contains the update and args contains the value', () => {
+            const updateComp = updateComponent({weight: '12'});
+            expect(updateComp.str).toEqual(' SET weight = $1');
+            expect(updateComp.args).toEqual(['12']);
+        });
+    });
+    describe('when multiple updates are given', () => {
+        test('then str and args contain all updates in proper order', () => {
+            const updateComp = updateComponent({weight: '12', wingspan: '14'});
+            expect(updateComp.str).toEqual(' SET weight = $1, wingspan = $2');
+            expect(updateComp.args).toEqual(['12', '14']);
         });
     });
 });

@@ -102,3 +102,25 @@ function fieldsComponent(fields) {
     return ' ' + fields.join(', ');
 }
 module.exports.fieldsComponent = fieldsComponent;
+
+function updateComponent(updates) {
+    let updateStr = '';
+    const updateValues = [];
+    let argCounter = 1;
+
+    Object.keys(updates).forEach((updateKey) => {
+        if (argCounter === 1) {
+            updateStr += ' SET ';
+        } else {
+            updateStr += ', ';
+        }
+        const updateVal = updates[updateKey];
+        updateStr += `${updateKey} = $${argCounter}`;
+        updateValues.push(updateVal);
+
+        argCounter++;
+    });
+
+    return {str: updateStr, args: updateValues};
+}
+module.exports.updateComponent = updateComponent;

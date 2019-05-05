@@ -2,12 +2,13 @@ const Joi = require('@hapi/joi');
 
 const validate = require('../middlewares/validation-middleware');
 const db = require('../db');
-const {ClientError} = require('../middlewares/error-middleware');
+const {ClientError, ValidationError} = require('../middlewares/error-middleware');
 const {
     sizeComponent,
     orderComponent,
     filterComponent,
-    fieldsComponent
+    fieldsComponent,
+    updateComponent
 } = require('../util/query-constructor');
 
 const SCHEMA = Joi.object().keys({
@@ -61,7 +62,8 @@ function mothRoutes(app) {
             }
         });
 
-    app.post('/moths', validate(SCHEMA),
+    app.post('/moths',
+        validate({body: SCHEMA}),
         async (req, res, next) => {
             const body = req.body;
             const species = body.species || null;
@@ -81,7 +83,15 @@ function mothRoutes(app) {
             }
         });
 
-    app.put('/moths/:id', validate(SCHEMA),
+    app.put('/moths/:id',
+        validate(
+            {
+                params: Joi.object.keys({
+                    id: Joi.string().uuid()
+                }),
+                body: SCHEMA
+            }
+        ),
         async (req, res, next) => {
             const id = req.params.id;
 
@@ -106,6 +116,34 @@ function mothRoutes(app) {
                     ($1, $2, $3, $3)`,
                     [species, wingspan, weight, lastSpotted]
                 );
+            } catch (error) {
+                next(error);
+            }
+        });
+
+    app.patch('/moths/:id',
+        validate(
+            {
+                params: Joi.object().keys({
+                    id: Joi.string().uuid()
+                }),
+                body: SCHEMA
+            }
+        ),
+        async (req, res, next) => {
+            const updateComp = updateComponent(req.body);
+            const args = updateComp.args;
+            try {
+                if (args.length === 0) {
+                    throw new ValidationError('At least one field must be specified');
+                }
+                args.push(req.params.id);
+
+                let queryString = 'UPDATE moths';
+                queryString += updateComp.str;
+                queryString += ` WHERE id = $${args.length + 1}`;
+                const moth = db.query(queryString, args);
+                res.status(200).send(moth.rows);
             } catch (error) {
                 next(error);
             }
