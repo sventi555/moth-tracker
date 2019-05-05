@@ -19,10 +19,10 @@ function orderComponent(orders) {
         orders = [orders];
     }
 
-    orders.map((order) => {
+    orders = orders.map((order) => {
         const dir = order.startsWith('-') ? 'DESC' : 'ASC';
 
-        const signed = order.startsWith('-') || order.startsWithc('+');
+        const signed = order.startsWith('-') || order.startsWith('+');
         const field = signed ? order.substring(1) : order;
         return {field: field, dir: dir};
     });
@@ -45,14 +45,14 @@ function filterComponent(filters) {
     let filterStr = '';
     const filterValues = [];
     let argCounter = 1;
-    Object.keys(filters).forEach((filterKey, index) => {
+    Object.keys(filters).forEach((filterKey) => {
 
         let filterVal = filters[filterKey];
         if (typeof filterVal === 'string') {
             filterVal = {'=': filterVal};
         }
         Object.keys(filterVal).forEach((operator) => {
-            if (index !== 0) {
+            if (argCounter !== 1) {
                 filterStr += ' AND ';
             } else {
                 filterStr += ' WHERE ';
@@ -99,6 +99,6 @@ function fieldsComponent(fields) {
         fields = [fields];
     }
 
-    return ' ' + fields.join();
+    return ' ' + fields.join(', ');
 }
 module.exports.fieldsComponent = fieldsComponent;
