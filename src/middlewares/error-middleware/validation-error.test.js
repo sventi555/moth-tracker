@@ -12,8 +12,8 @@ describe('given a ValidationError is constructed', () => {
         expect(error instanceof ValidationError);
         expect(error instanceof Error);
     });
-    test('then the code should be 422', () => {
-        expect(error.code).toEqual(422);
+    test('then the code should be 400', () => {
+        expect(error.code).toEqual(400);
     });
     test('then the message should be the error list passed in', () => {
         expect(error.message).toEqual(JSON.stringify(errMessage));

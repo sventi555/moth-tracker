@@ -75,9 +75,10 @@ function mothRoutes(app) {
                     `INSERT INTO moths
                     (species, wingspan, weight, last_spotted)
                     VALUES
-                    ($1, $2, $3, $3)`,
+                    ($1, $2, $3, $4)`,
                     [species, wingspan, weight, lastSpotted]
                 );
+                res.status(204).send();
             } catch (error) {
                 next(error);
             }
@@ -86,7 +87,7 @@ function mothRoutes(app) {
     app.put('/moths/:id',
         validate(
             {
-                params: Joi.object.keys({
+                params: Joi.object().keys({
                     id: Joi.string().uuid()
                 }),
                 body: SCHEMA
@@ -116,6 +117,7 @@ function mothRoutes(app) {
                     ($1, $2, $3, $3)`,
                     [species, wingspan, weight, lastSpotted]
                 );
+                res.status(204).send();
             } catch (error) {
                 next(error);
             }
@@ -141,9 +143,9 @@ function mothRoutes(app) {
 
                 let queryString = 'UPDATE moths';
                 queryString += updateComp.str;
-                queryString += ` WHERE id = $${args.length + 1}`;
-                const moth = db.query(queryString, args);
-                res.status(200).send(moth.rows);
+                queryString += ` WHERE id = $${args.length}`;
+                await db.query(queryString, args);
+                res.status(204).send();
             } catch (error) {
                 next(error);
             }

@@ -1,4 +1,4 @@
-const {ClientError} = require('../middlewares/error-middleware');
+const {ValidationError} = require('../middlewares/error-middleware');
 
 function sizeComponent(limit, offset) {
     let sizeStr = '';
@@ -22,7 +22,7 @@ function orderComponent(orders) {
     orders = orders.map((order) => {
         const dir = order.startsWith('-') ? 'DESC' : 'ASC';
 
-        const signed = order.startsWith('-') || order.startsWith('+');
+        const signed = order.startsWith('-');
         const field = signed ? order.substring(1) : order;
         return {field: field, dir: dir};
     });
@@ -76,8 +76,8 @@ function filterComponent(filters) {
                 filterStr += ' <= ';
                 break;
             default:
-                throw new ClientError(
-                    `invalid filter operator for ${filterKey}`
+                throw new ValidationError(
+                    `Invalid filter operator for ${filterKey}`
                 );
             }
             filterStr += `$${argCounter}`;

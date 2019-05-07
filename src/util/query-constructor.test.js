@@ -47,16 +47,13 @@ describe('given orderComponent is being called', () => {
         });
     });
     describe('when direction is stated', () => {
-        test('then positive maps to ascending', () => {
-            expect(orderComponent(['+weight'])).toEqual(' ORDER BY weight ASC');
-        });
         test('then negative maps to descending', () => {
             expect(orderComponent(['-weight'])).toEqual(' ORDER BY weight DESC');
         });
     });
     describe('when multiple orders are given', () => {
         test('then all given orders are applied', () => {
-            expect(orderComponent(['+weight', '-wingspan']))
+            expect(orderComponent(['weight', '-wingspan']))
                 .toEqual(' ORDER BY weight ASC, wingspan DESC');
         });
     });
