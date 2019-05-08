@@ -25,7 +25,7 @@ describe('given validate middleware is being called', () => {
             await supertest(app)
                 .post('/')
                 .send({age: 'very old'})
-                .expect(422);
+                .expect(400);
         });
         test('then validation should succeed with good body', async () => {
             await supertest(app)
@@ -48,7 +48,7 @@ describe('given validate middleware is being called', () => {
             await supertest(app)
                 .get('/')
                 .query({age: 'very old'})
-                .expect(422);
+                .expect(400);
         });
         test('then validation should pass with good query', async () => {
             await supertest(app)
@@ -70,7 +70,7 @@ describe('given validate middleware is being called', () => {
         test('then validation should fail with bad params', async () => {
             await supertest(app)
                 .get('/hi')
-                .expect(422);
+                .expect(400);
         });
         test('then validation should pass on good params', async () => {
             await supertest(app)
