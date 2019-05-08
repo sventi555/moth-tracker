@@ -14,10 +14,6 @@ function errorMiddleware(error, req, res, next) {
     } else if (error instanceof ClientError) {
         res.status(error.code).json({error: error.message});
 
-    // column does not exist in postgres, query must have been bad
-    } else if (error.code === '42703') {
-        res.status(422).json({error: error.message});
-
     // if I didn't catch it, it's a server error lol
     } else {
         res.status(500).json(

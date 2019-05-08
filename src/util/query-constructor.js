@@ -1,4 +1,4 @@
-const {ValidationError} = require('../middlewares/error-middleware');
+const {ClientError} = require('../middlewares/error-middleware');
 
 function sizeComponent(limit, offset) {
     let sizeStr = '';
@@ -76,9 +76,7 @@ function filterComponent(filters) {
                 filterStr += ' <= ';
                 break;
             default:
-                throw new ValidationError(
-                    `Invalid filter operator for ${filterKey}`
-                );
+                throw new ClientError(`Invalid filter operator for ${filterKey}`);
             }
             filterStr += `$${argCounter}`;
             filterValues.push(filterVal[operator]);

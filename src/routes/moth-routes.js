@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 
 const validate = require('../middlewares/validation-middleware');
 const db = require('../db');
-const {ClientError, ValidationError} = require('../middlewares/error-middleware');
+const {ClientError} = require('../middlewares/error-middleware');
 const {
     sizeComponent,
     orderComponent,
@@ -72,12 +72,8 @@ function mothRoutes(app) {
             const lastSpotted = body.lastSpotted || null;
             try {
                 await db.query(
-                    `INSERT INTO moths
-                    (species, wingspan, weight, last_spotted)
-                    VALUES
-                    ($1, $2, $3, $4)`,
-                    [species, wingspan, weight, lastSpotted]
-                );
+                    'INSERT INTO moths (species, wingspan, weight, last_spotted) \
+VALUES ($1, $2, $3, $4)', [species, wingspan, weight, lastSpotted]);
                 res.status(204).send();
             } catch (error) {
                 next(error);
@@ -111,12 +107,8 @@ function mothRoutes(app) {
                 await db.query(
                     'DELETE FROM moths WHERE id = $1', [req.params.id]);
                 await db.query(
-                    `INSERT INTO moths
-                    (species, wingspan, weight, last_spotted)
-                    VALUES
-                    ($1, $2, $3, $3)`,
-                    [species, wingspan, weight, lastSpotted]
-                );
+                    'INSERT INTO moths (species, wingspan, weight, last_spotted) \
+VALUES ($1, $2, $3, $3)', [species, wingspan, weight, lastSpotted]);
                 res.status(204).send();
             } catch (error) {
                 next(error);
@@ -137,7 +129,7 @@ function mothRoutes(app) {
             const args = updateComp.args;
             try {
                 if (args.length === 0) {
-                    throw new ValidationError('At least one field must be specified');
+                    throw new ClientError('At least one field must be specified');
                 }
                 args.push(req.params.id);
 
