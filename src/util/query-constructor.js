@@ -122,3 +122,47 @@ function updateComponent(updates) {
     return {str: updateStr, args: updateValues};
 }
 module.exports.updateComponent = updateComponent;
+
+function argsFromSchema(body, schema) {
+    const args = [];
+
+    Object.keys(schema).forEach((key) => {
+        const val = body[key];
+        args.push(val ? val : null);
+    });
+
+    return args;
+}
+module.exports.argsFromSchema = argsFromSchema;
+
+function columnsFromSchema(schema) {
+    let columnsString = '(';
+
+    Object.keys(schema).forEach((key, index) => {
+        if (index !== 0) {
+            columnsString += ', ';
+        }
+
+        columnsString += key;
+    });
+
+    columnsString += ')';
+    return columnsString;
+}
+module.exports.columnsFromSchema = columnsFromSchema;
+
+function placeholdersFromSchema(schema) {
+    let placeholdersString = '(';
+
+    const len = Object.keys(schema).length;
+    for (let i = 0; i < len; i++) {
+        if (i !== 0) {
+            placeholdersString += ', ';
+        }
+        placeholdersString += `$${i + 1}`;
+    }
+
+    placeholdersString += ')';
+    return placeholdersString;
+}
+module.exports.placeholdersFromSchema = placeholdersFromSchema;
