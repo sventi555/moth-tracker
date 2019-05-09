@@ -1,26 +1,19 @@
 const Joi = require('@hapi/joi');
 
-const validate = require('../middlewares/validation-middleware');
 const db = require('../db');
 const {ClientError} = require('../middlewares/error-middleware');
+const validate = require('../middlewares/validation-middleware');
+const mothsSchema = require('../schemas/moths-schema');
 const {
-    sizeComponent,
-    orderComponent,
-    filterComponent,
+    argsFromSchema,
+    columnsFromSchema,
     fieldsComponent,
+    filterComponent,
+    orderComponent,
+    placeholdersFromSchema,
+    sizeComponent,
     updateComponent
 } = require('../util/query-constructor');
-
-const SCHEMA = Joi.object().keys({
-    id: Joi.any().forbidden(),
-    species: Joi.string(),
-    wingspan: Joi.number().positive(),
-    weight: Joi.number().positive(),
-    lastSpotted: Joi.object().keys({
-        lat: Joi.number().min(-90).max(90),
-        lng: Joi.number().min(-180).max(180)
-    })
-});
 
 function mothRoutes(app) {
     app.get('/moths/:id?',
@@ -33,8 +26,9 @@ function mothRoutes(app) {
                     fields: Joi.alternatives().try([Joi.string(), Joi.array()]),
                     sort: Joi.alternatives().try([Joi.string(), Joi.array()]),
                     limit: Joi.number().integer(),
-                    offset: Joi.number().integer()
-                }).unknown()
+                    offset: Joi.number().integer(),
+                    ...mothsSchema
+                })
             }
         ),
         async (req, res, next) => {
@@ -63,17 +57,22 @@ function mothRoutes(app) {
         });
 
     app.post('/moths',
-        validate({body: SCHEMA}),
+        validate(
+            {
+                body: Joi.object().keys({
+                    id: Joi.any().forbidden(),
+                    ...mothsSchema
+                })
+            }
+        ),
         async (req, res, next) => {
             const body = req.body;
-            const species = body.species || null;
-            const wingspan = body.wingspan || null;
-            const weight = body.weight || null;
-            const lastSpotted = body.lastSpotted || null;
+            const args = argsFromSchema(body, mothsSchema);
+
             try {
                 await db.query(
-                    'INSERT INTO moths (species, wingspan, weight, last_spotted) \
-VALUES ($1, $2, $3, $4)', [species, wingspan, weight, lastSpotted]);
+                    `INSERT INTO moths ${columnsFromSchema(mothsSchema)} \
+VALUES ${placeholdersFromSchema(mothsSchema)}`, args);
                 res.status(204).send();
             } catch (error) {
                 next(error);
@@ -86,18 +85,19 @@ VALUES ($1, $2, $3, $4)', [species, wingspan, weight, lastSpotted]);
                 params: Joi.object().keys({
                     id: Joi.string().uuid()
                 }),
-                body: SCHEMA
+                body: Joi.object().keys({
+                    id: Joi.any().forbidden(),
+                    ...mothsSchema
+                })
             }
         ),
         async (req, res, next) => {
             const id = req.params.id;
+            const body = req.body;
+            const args = argsFromSchema(body, mothsSchema);
 
-            const species = req.body.species || null;
-            const wingspan = req.body.wingspan || null;
-            const weight = req.body.weight || null;
-            const lastSpotted = req.body.lastSpotted || null;
             try {
-                const moth = db.query(
+                const moth = await db.query(
                     'SELECT id FROM moths WHERE id = $1', [id]);
                 if (moth.rows.length === 0) {
                     throw new ClientError(
@@ -107,8 +107,8 @@ VALUES ($1, $2, $3, $4)', [species, wingspan, weight, lastSpotted]);
                 await db.query(
                     'DELETE FROM moths WHERE id = $1', [req.params.id]);
                 await db.query(
-                    'INSERT INTO moths (species, wingspan, weight, last_spotted) \
-VALUES ($1, $2, $3, $3)', [species, wingspan, weight, lastSpotted]);
+                    `INSERT INTO moths ${columnsFromSchema(mothsSchema)} \
+VALUES ${placeholdersFromSchema(mothsSchema)}`, args);
                 res.status(204).send();
             } catch (error) {
                 next(error);
@@ -121,7 +121,10 @@ VALUES ($1, $2, $3, $3)', [species, wingspan, weight, lastSpotted]);
                 params: Joi.object().keys({
                     id: Joi.string().uuid()
                 }),
-                body: SCHEMA
+                body: Joi.object().keys({
+                    id: Joi.any().forbidden(),
+                    ...mothsSchema
+                })
             }
         ),
         async (req, res, next) => {

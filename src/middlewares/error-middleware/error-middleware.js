@@ -3,6 +3,7 @@ const ValidationError = require('./validation-error');
 
 function errorMiddleware(error, req, res, next) {
     // no need to process an error if there isn't one
+    console.log(error);
     if (!error) {
         next();
 
