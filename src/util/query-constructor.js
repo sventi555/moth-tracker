@@ -1,5 +1,15 @@
 const {ClientError} = require('../middlewares/error-middleware');
 
+/**
+ * Returns a component of a query string containing limit and offset values.
+ *
+ * Ex. sizeComponent(4, 6) = ' LIMIT 4 OFFSET 6'
+ * Ex. sizeComponent(null, 2) = ' OFFSET 2'
+ *
+ * @param {Number} [limit]
+ * @param {Number} [offset]
+ * @returns {String}
+ */
 function sizeComponent(limit, offset) {
     let sizeStr = '';
 
@@ -10,6 +20,16 @@ function sizeComponent(limit, offset) {
 }
 module.exports.sizeComponent = sizeComponent;
 
+/**
+ * Returns a component of a query string containing order values.
+ *
+ * Ex. orderComponent('weight') = ' ORDER BY weight ASC'
+ * Ex. orderComponent('-weight') = ' ORDER BY weight DESC'
+ * Ex. orderComponent(['weight', '-wingspan']) = ' ORDER BY weight ASC, wingspan DESC'
+ *
+ * @param {String|String[]} [orders]
+ * @returns {String}
+ */
 function orderComponent(orders) {
     if (!orders || orders.length === 0) {
         return '';
@@ -41,6 +61,18 @@ function orderComponent(orders) {
 }
 module.exports.orderComponent = orderComponent;
 
+/**
+ * Returns an object with a component of a query string containing filter
+ * placeholders and an array containing the corresponding values.
+ *
+ * Ex. filterComponent({weight: 2}) = {str: ' WHERE weight = $1', args: [2]}
+ * Ex. filterComponent({weight: {lt: 2}}) = {str: ' WHERE weight < $1', args: [2]}
+ *
+ * Valid operators (apart from equality) are: lt, lte, gt, gte
+ *
+ * @param {Object} filters
+ * @returns {Object}
+ */
 function filterComponent(filters) {
     let filterStr = '';
     const filterValues = [];
@@ -88,6 +120,16 @@ function filterComponent(filters) {
 }
 module.exports.filterComponent = filterComponent;
 
+/**
+ * Returns a component of a query string containing field values.
+ *
+ * Ex. fieldsComponent() = ' *'
+ * Ex. fieldsComponent('weight') = ' weight'
+ * Ex. fieldsComponent(['weight', 'wingspan']) = ' weight, wingspan'
+ *
+ * @param {String|String[]} [fields]
+ * @returns {String}
+ */
 function fieldsComponent(fields) {
     if (!fields || fields.length === 0) {
         return ' *';
@@ -101,6 +143,15 @@ function fieldsComponent(fields) {
 }
 module.exports.fieldsComponent = fieldsComponent;
 
+/**
+ * Returns an object with a component of an update query containing placeholers
+ * and an array of the updated values.
+ *
+ * Ex. updateComponent({weight: 4}) = {str: ' SET weight = $1', args: [4]}
+ *
+ * @param {Object} updates
+ * @returns {String}
+ */
 function updateComponent(updates) {
     let updateStr = '';
     const updateValues = [];
@@ -123,6 +174,20 @@ function updateComponent(updates) {
 }
 module.exports.updateComponent = updateComponent;
 
+/**
+ * Returns a list of args constructed from a request body and a schema. Any
+ * values in the schema not listed in body are set to null. The args order is
+ * determined by the order of the keys in schema.
+ *
+ * Ex. argsFromSchema(
+ *         {weight: 2},
+ *         {weight: Joi.number().integer(), wingspan: Joi.number().integer()}
+ *     ) = [2, null]
+ *
+ * @param {Object} body
+ * @param {Object} schema
+ * @returns {*[]}
+ */
 function argsFromSchema(body, schema) {
     const args = [];
 
@@ -135,6 +200,16 @@ function argsFromSchema(body, schema) {
 }
 module.exports.argsFromSchema = argsFromSchema;
 
+/**
+ * Returns a component of an insert query containing all possible columns.
+ *
+ * Ex. columnsFromSchema(
+ *         {weight: Joi.number().integer, wingspan: Joi.number().integer()}
+ *     ) = '(weight, wingspan)'
+ *
+ * @param {Object} schema
+ * @returns {String}
+ */
 function columnsFromSchema(schema) {
     let columnsString = '(';
 
@@ -151,6 +226,17 @@ function columnsFromSchema(schema) {
 }
 module.exports.columnsFromSchema = columnsFromSchema;
 
+/**
+ * Returns a component of an insert query containing placeholders for each
+ * table column.
+ *
+ * Ex. placeholdersFromSchema(
+ *         {weight: Joi.number().integer, wingspan: Joi.number().integer()}
+ *     ) = '($1, $2)'
+ *
+ * @param {Object} schema
+ * @returns {String}
+ */
 function placeholdersFromSchema(schema) {
     let placeholdersString = '(';
 

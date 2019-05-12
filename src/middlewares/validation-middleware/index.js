@@ -2,6 +2,22 @@ const Joi = require('@hapi/joi');
 
 const { ValidationError } = require('../error-middleware');
 
+/**
+ * Returns a middleware function that continues on if all the
+ * schemas validate successfully against the request body,
+ * params, and query (if included in schemas).
+ *
+ * Example schemas looks like this:
+ * const schemas = {
+ *     body: Joi.object.keys({id: Joi.any().forbidden()}),
+ *     params: Joi.object.keys({id: Joi.number().integer()})
+ * }
+ *
+ * This example left out a schema for query, but it could just have
+ * easily been included.
+ *
+ * @param {Object} schemas
+ */
 function validate(schemas) {
     return (req, res, next) => {
         if (!schemas) {
