@@ -6,8 +6,8 @@ const {ClientError} = require('../middlewares/error-middleware');
  * Ex. sizeComponent(4, 6) = ' LIMIT 4 OFFSET 6'
  * Ex. sizeComponent(null, 2) = ' OFFSET 2'
  *
- * @param {Number} limit
- * @param {Number} offset
+ * @param {Number} [limit]
+ * @param {Number} [offset]
  * @returns {String}
  */
 function sizeComponent(limit, offset) {
@@ -27,7 +27,7 @@ module.exports.sizeComponent = sizeComponent;
  * Ex. orderComponent('-weight') = ' ORDER BY weight DESC'
  * Ex. orderComponent(['weight', '-wingspan']) = ' ORDER BY weight ASC, wingspan DESC'
  *
- * @param {String|String[]} orders
+ * @param {String|String[]} [orders]
  * @returns {String}
  */
 function orderComponent(orders) {
@@ -63,7 +63,7 @@ module.exports.orderComponent = orderComponent;
 
 /**
  * Returns an object with a component of a query string containing filter
- * placeholders and an array containing the corresponding values..
+ * placeholders and an array containing the corresponding values.
  *
  * Ex. filterComponent({weight: 2}) = {str: ' WHERE weight = $1', args: [2]}
  * Ex. filterComponent({weight: {lt: 2}}) = {str: ' WHERE weight < $1', args: [2]}
@@ -127,7 +127,7 @@ module.exports.filterComponent = filterComponent;
  * Ex. fieldsComponent('weight') = ' weight'
  * Ex. fieldsComponent(['weight', 'wingspan']) = ' weight, wingspan'
  *
- * @param {String|String[]} fields
+ * @param {String|String[]} [fields]
  * @returns {String}
  */
 function fieldsComponent(fields) {

@@ -2,8 +2,9 @@ class ClientError extends Error {
     /**
      * Creates an instance of ClientError.
      *
-     * @param {String} message
-     * @param {Number} code
+     * @param {String} [message]
+     * @param {Number} [code=400]
+     * @property {Number} code
      */
     constructor(message, code=400) {
         super(message);
