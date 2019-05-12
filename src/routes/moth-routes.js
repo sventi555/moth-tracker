@@ -15,6 +15,11 @@ const {
     updateComponent
 } = require('../util/query-constructor');
 
+/**
+ * Applies moth routes for various methods to the express app.
+ *
+ * @param {*} app
+ */
 function mothRoutes(app) {
     app.get('/moths/:id?',
         validate(

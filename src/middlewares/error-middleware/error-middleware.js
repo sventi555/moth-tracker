@@ -1,6 +1,15 @@
 const ClientError = require('./client-error');
 const ValidationError = require('./validation-error');
 
+/**
+ * Middleware function to handle errors. Will return a response
+ * depending on the error passed in.
+ *
+ * @param {Error} error
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 function errorMiddleware(error, req, res, next) {
     // no need to process an error if there isn't one
     if (!error) {
