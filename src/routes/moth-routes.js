@@ -16,7 +16,7 @@ const {
 } = require('../util/query-constructor');
 
 /**
- * Applies moth routes for various methods to the express app.
+ * Applies moth routes for various request methods to the express app.
  *
  * @param {*} app
  */

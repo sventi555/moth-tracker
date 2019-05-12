@@ -195,7 +195,7 @@ function argsFromSchema(body, schema) {
         const val = body[key];
         args.push(val ? val : null);
     });
-    String;
+
     return args;
 }
 module.exports.argsFromSchema = argsFromSchema;
