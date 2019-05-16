@@ -21,7 +21,7 @@ const {
  * @param {*} app
  */
 function mothRoutes(app) {
-    app.get('/moths/:id?',
+    app.get('/api/moths/:id?',
         validate(
             {
                 params: Joi.object().keys({
@@ -61,7 +61,7 @@ function mothRoutes(app) {
             }
         });
 
-    app.post('/moths',
+    app.post('/api/moths',
         validate(
             {
                 body: Joi.object().keys({
@@ -84,7 +84,7 @@ VALUES ${placeholdersFromSchema(mothsSchema)}`, args);
             }
         });
 
-    app.put('/moths/:id',
+    app.put('/api/moths/:id',
         validate(
             {
                 params: Joi.object().keys({
@@ -120,7 +120,7 @@ VALUES ${placeholdersFromSchema(mothsSchema)}`, args);
             }
         });
 
-    app.patch('/moths/:id',
+    app.patch('/api/moths/:id',
         validate(
             {
                 params: Joi.object().keys({
@@ -151,7 +151,7 @@ VALUES ${placeholdersFromSchema(mothsSchema)}`, args);
             }
         });
 
-    app.delete('/moths/:id',
+    app.delete('/api/moths/:id',
         validate({params: Joi.object().keys({
             id: Joi.string().uuid()
         })}),

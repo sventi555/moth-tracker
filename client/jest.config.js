@@ -1,7 +1,7 @@
 module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
-        './server/**/*.js',
+        './**/*.js',
         '!**/*.test.js'
     ],
     coverageDirectory: './coverage',
@@ -10,8 +10,8 @@ module.exports = {
         'cobertura'
     ],
     clearMocks: true,
-    displayName: 'server',
+    displayName: 'client',
     rootDir: __dirname,
     testEnvironment: 'node',
-    testRegex: './server/.*\\.(test)\\.js$'
+    testRegex: './.*\\.(test)\\.js$'
 };
