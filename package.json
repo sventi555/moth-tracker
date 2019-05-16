@@ -4,8 +4,10 @@
   "description": "tracks Romanian meter moths",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint .",
+    "client" : "yarn --cwd client",
+    "lint": "eslint ./server",
     "start": "node src/index.js",
+    "ci:test": "yarn lint && yarn test && yarn client ci:test",
     "test": "jest",
     "watch": "nodemon src/index.js"
   },
