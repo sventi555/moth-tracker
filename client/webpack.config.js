@@ -1,13 +1,14 @@
 require('dotenv').config();
 
-// const htmlWebpackPlugin = require('html-webpack-plugin');
+const cleanWebpackPlugin = require('clean-webpack-plugin');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 
 const {
     MODE,
 } = process.env;
 
 module.exports = {
-    entry: 'index.js',
+    entry: './src/index.js',
     devServer: {
         compress: true,
         historyApiFallback: true,
@@ -29,5 +30,13 @@ module.exports = {
             }
         ]
     },
-    plugins: []
+    optimization: {
+        minimize: true
+    },
+    plugins: [
+        new htmlWebpackPlugin({
+            template: './src/index.html'
+        }),
+        new cleanWebpackPlugin()
+    ]
 };
