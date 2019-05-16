@@ -1,19 +1,17 @@
 {
-  "name": "moth-tracker",
+  "name": "client",
   "version": "1.0.0",
-  "description": "tracks Romanian meter moths",
-  "main": "src/index.js",
+  "description": "client for moth tracker",
+  "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
-    "start": "node src/index.js",
-    "test": "jest",
-    "watch": "nodemon src/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sventi555/moth-tracker.git"
   },
   "keywords": [
+    "react",
     "mothware"
   ],
   "author": "Stephen Edwards",
@@ -23,15 +21,16 @@
   },
   "homepage": "https://github.com/sventi555/moth-tracker#readme",
   "dependencies": {
-    "@hapi/joi": "15.0.0",
-    "dotenv-safe": "6.1.0",
-    "express": "4.16.4",
-    "pg": "7.10.0"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "eslint": "5.16.0",
-    "jest": "24.7.1",
-    "nodemon": "1.18.11",
-    "supertest": "4.0.2"
+    "@babel/core": "7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/preset-react": "7.0.0",
+    "babel-loader": "8.0.6",
+    "html-webpack-plugin": "3.2.0",
+    "webpack": "4.31.0",
+    "webpack-cli": "3.3.2"
   }
 }
