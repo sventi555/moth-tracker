@@ -1,3 +1,11 @@
+require('dotenv').config();
+
+// const htmlWebpackPlugin = require('html-webpack-plugin');
+
+const {
+    MODE,
+} = process.env;
+
 module.exports = {
     entry: 'index.js',
     devServer: {
@@ -8,16 +16,18 @@ module.exports = {
             '/api': 'http://localhost:3000'
         },
         watchContentBase: true
-    }
+    },
+    mode: MODE ? MODE : 'production',
     module: {
         rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: "babel-loader"
+                    loader: 'babel-loader'
                 }
             }
         ]
-    }
-}
+    },
+    plugins: []
+};
