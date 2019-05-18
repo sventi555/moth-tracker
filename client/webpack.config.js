@@ -2,6 +2,7 @@ require('dotenv').config({path: '../.env'});
 
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const {
     MODE,
@@ -16,8 +17,10 @@ module.exports = {
         proxy: {
             '/api': 'http://localhost:3000'
         },
-        watchContentBase: true
+        watchContentBase: true,
+        hot: true
     },
+    devtool: 'source-map',
     mode: MODE ? MODE : 'production',
     module: {
         rules: [
@@ -37,6 +40,7 @@ module.exports = {
         new htmlWebpackPlugin({
             template: './src/index.html'
         }),
-        new cleanWebpackPlugin()
+        new cleanWebpackPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
