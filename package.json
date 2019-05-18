@@ -4,7 +4,6 @@
   "description": "tracks Romanian meter moths",
   "main": "src/index.js",
   "scripts": {
-    "client" : "yarn --cwd client",
     "lint": "eslint ./server",
     "start": "node src/index.js",
     "ci:test": "yarn lint && yarn test && yarn client ci:test",
