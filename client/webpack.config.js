@@ -1,23 +1,26 @@
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const {
     MODE,
+    PORT
 } = process.env;
 
 module.exports = {
     entry: './src/index.js',
     devServer: {
-        compress: true,
         historyApiFallback: true,
-        port: 3001,
+        port: parseInt(PORT) + 1,
         proxy: {
             '/api': 'http://localhost:3000'
         },
-        watchContentBase: true
+        watchContentBase: true,
+        hot: true
     },
+    devtool: 'source-map',
     mode: MODE ? MODE : 'production',
     module: {
         rules: [
@@ -30,13 +33,14 @@ module.exports = {
             }
         ]
     },
-    optimization: {
-        minimize: true
+    performance: {
+        hints: false,
     },
     plugins: [
         new htmlWebpackPlugin({
             template: './src/index.html'
         }),
-        new cleanWebpackPlugin()
+        new cleanWebpackPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
