@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint ./server",
     "start": "node src/index.js",
-    "ci:test": "yarn lint && yarn test && yarn client ci:test",
+    "ci:test": "yarn lint && yarn test",
     "test": "jest",
     "watch": "nodemon src/index.js"
   },
